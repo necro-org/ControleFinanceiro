@@ -1,0 +1,19 @@
+name: Build and push frontend image
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "Frontend/**"
+      - ".github/workflows/frontend-image.yml"
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: necro-org/workflows/.github/workflows/docker-image.yml@main
+    permissions:
+      contents: read
+      packages: write
+    with:
+      image: controle-financeiro-fe
+      context: ./Frontend
