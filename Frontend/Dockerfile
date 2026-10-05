@@ -9,9 +9,6 @@ RUN npm install
 
 COPY . .
 
-ARG VITE_BASE_API_URL
-ENV VITE_BASE_API_URL=$VITE_BASE_API_URL
-
 RUN npm run build
 
 # Step 2 - Nginx
@@ -21,6 +18,12 @@ COPY --from=build /app/dist /usr/share/nginx/html
 
 # replace config default of nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+COPY docker/env.template.js /etc/nginx/env.template.js
+
+COPY docker/40-generate-env.sh /docker-entrypoint.d/40-generate-env.sh
+
+RUN chmod +x /docker-entrypoint.d/40-generate-env.sh
 
 EXPOSE 80
 
